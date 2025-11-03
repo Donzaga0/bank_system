@@ -1,0 +1,195 @@
+<% if (res.locals._admin) { %>
+    <!-- Sidebar End -->
+    <div class="sidebar pe-4 pb-3">
+        <nav class="navbar navbar-light" style="background-color: #FFFFFF;">
+            <!-- Branding -->
+            <a href="" class="navbar-brand mx-4 mb-3">
+                <h3 class=""
+                    style="color: #374151; font-size: large; font-weight: 700; font-family: 'Times New Roman', Times, serif;">
+                    Admin Panel
+                </h3>
+            </a>
+
+            <!-- User Info -->
+            <div class="d-flex align-items-center ms-4 mb-4">
+                <div class="position-relative">
+                    <img class="rounded-circle" src="" alt="#" style="width: 40px; height: 40px;">
+                    <div
+                        class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+                    </div>
+                </div>
+                <div class="ms-3">
+                    <h6 class="mb-0">
+                    <%= res.locals._admin.fname %>
+                     <%= res.locals._admin.lname %>
+                     </h6>
+                                <span>Administrator</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="admin-navbar-nav w-80">
+                <!-- Dashboard -->
+                <a href="/admin/dashboard" class="admin-nav-item admin-nav-link active text-light">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+
+                <!-- Manage Students -->
+                <a href="/admin/students" class="admin-nav-item admin-nav-link">
+                    <i class="fas fa-users me-2"></i>Manage Users
+                </a>
+
+                <!-- Fees Management -->
+                <a href="/admin/fees" class="admin-nav-item admin-nav-link">
+                    <i class="fas fa-wallet me-2"></i>Manage Transcations
+                </a>
+
+                <!-- Payment Records -->
+                <a href="/admin/payments" class="admin-nav-item admin-nav-link">
+                    <i class="fas fa-file-invoice-dollar me-2"></i>Payment Records
+                </a>
+
+                <!-- Notifications -->
+                <a href="/admin/notifications" class="admin-nav-item admin-nav-link">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                </a>
+
+                <!-- Settings -->
+                <a href="/admin/settings" class="admin-nav-item admin-nav-link">
+                    <i class="fas fa-cogs me-2"></i>Settings
+                </a>
+
+                <!-- Logout -->
+                <a href="/auth/logout" class="admin-nav-item admin-nav-link text-danger">
+                    <i class="fas fa-sign-out-alt me-2 my-3"></i>Logout
+                </a>
+            </div>
+        </nav>
+
+    </div>
+
+    <div class="content">
+        <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+            <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <h2 class="text-primary mb-0"><i class="fa fa-cogs"></i></h2>
+            </a>
+            <a href="#" class="sidebar-toggler flex-shrink-0" style="color: #374151;">
+                <i class="fa fa-bars"></i>
+            </a>
+            <form class="d-none d-md-flex ms-4">
+                <input class="form-control border rounded-pill shadow-sm" type="search" placeholder="Search..."
+                    aria-label="Search">
+            </form>
+
+            <div class="navbar-nav align-items-center ms-auto">
+
+                <!-- Notifications + Add Student -->
+                <div class="d-flex align-items-center">
+                    <!-- Quick Add Student Button -->
+                    <a href="/admin/register-student"
+                        class="btn btn-sm btn-primary me-3 rounded-circle d-flex align-items-center justify-content-center"
+                        title="Register Student" style="width: 35px; height: 35px;">
+                        <i class="fa fa-plus"></i>
+                    </a>
+
+                    <!-- Notifications Dropdown -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="color: #374151;">
+                            <i class="fas fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notifications</span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end bg-light shadow-sm rounded">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-plus text-primary me-3"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-0">New Student Registered</h6>
+                                        <small class="text-muted">5 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-wallet text-success me-3"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-0">New Payment Recorded</h6>
+                                        <small class="text-muted">20 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-chalkboard-teacher text-warning me-3"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-0">Staff Update Posted</h6>
+                                        <small class="text-muted">45 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-circle text-danger me-3"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-0">System Alert</h6>
+                                        <small class="text-muted">1 hour ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="/admin/notifications" class="dropdown-item text-center fw-bold text-primary">See
+                                All Notifications</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="nav-item dropdown ms-3">
+                    <a href="#" class="nav-link dropdown-toggle d-flex align-items-center text-dark"
+                        data-bs-toggle="dropdown">
+                        <img class="rounded-circle me-2" src="/img/admin-avatar.jpg" alt="Admin Avatar"
+                            style="width: 40px; height: 40px;">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end bg-light shadow-sm rounded">
+                        <a href="/admin/profile" class="dropdown-item">
+                            <i class="fas fa-user text-primary me-2"></i>My Profile
+                        </a>
+                        <a href="/admin/settings" class="dropdown-item">
+                            <i class="fas fa-cogs text-secondary me-2"></i>Settings
+                        </a>
+                        <a href="/auth/logout" class="dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                /* Custom Styling */
+                .dropdown-menu {
+                    padding: 10px;
+                    border-radius: 10px;
+                }
+
+                .dropdown-item {
+                    transition: background-color 0.3s ease;
+                }
+
+                .dropdown-item:hover {
+                    background-color: rgba(0, 123, 255, 0.1);
+                }
+
+                .form-control {
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .form-control:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                }
+            </style>
+        </nav>
+        <% } %>

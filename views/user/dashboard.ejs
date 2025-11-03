@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikiMap Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --light-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 70px;
+            /* Space for fixed footer */
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .date-time {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .account-section {
+            margin-bottom: 25px;
+        }
+
+        .account-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .account-item {
+            padding: 8px 0;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.2s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .account-item:hover {
+            color: var(--primary-color);
+        }
+
+        .account-item.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .user-info h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .user-info p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .bank-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .bank-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .bank-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .account-card {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .account-name {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .account-balance {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .savings-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .savings-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .actions-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .actions-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .action-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+
+        .action-text {
+            font-size: 14px;
+        }
+
+        .info-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .view-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .view-text {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+            padding: 10px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: color 0.2s;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 20px;
+            padding-bottom: 70px;
+            /* Space for fixed footer */
+        }
+
+        .page-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .sidebar {
+                grid-column: 1;
+                grid-row: 1 / span 2;
+            }
+
+            .bank-section {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .savings-section {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            .actions-section {
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .info-section {
+                grid-column: 2;
+                grid-row: 3;
+            }
+
+            .view-section {
+                grid-column: 1 / span 2;
+                grid-row: 4;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Dashboard Page -->
+    <div class="page-content">
+        <div class="dashboard-container">
+            <div class="header">
+                <a href="dashboard.html" class="logo">WikiMap</a>
+                <div class="date-time">9/20/2025 5:53 PM</div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="sidebar">
+                    <div class="account-section">
+                        <div class="account-title">Accounts</div>
+                        <a href="dashboard.html" class="account-item active">Dashboard</a>
+                        <a href="products.html" class="account-item">Products</a>
+                    </div>
+
+                    <div class="user-section">
+                        <div class="avatar">M</div>
+                        <div class="user-info">
+                            <h4>Hello, Myestia</h4>
+                            <p>My Rewards</p>
+                        </div>
+                    </div>
+
+                    <div class="account-section">
+                        <div class="account-title">Bank of America</div>
+                        <button class="btn btn-primary w-100">OPEN NEW ACCOUNT</button>
+                    </div>
+                </div>
+
+                <div class="bank-section">
+                    <div class="bank-header">
+                        <div class="bank-title">Advantage SafeBalance Banking</div>
+                    </div>
+
+                    <div class="account-card">
+                        <div class="account-name">Auto SafeBalance Banking</div>
+                        <div class="account-balance">$10,100.00</div>
+                    </div>
+                </div>
+
+                <div class="savings-section">
+                    <div class="savings-title">Open a savings account</div>
+                    <button class="btn btn-outline">Get started</button>
+                </div>
+
+                <div class="actions-section">
+                    <div class="actions-title">Actions</div>
+                    <div class="action-item">
+                        <div class="action-icon">
+                            <i class="fas fa-table"></i>
+                        </div>
+                        <div class="action-text">Toward Table</div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">Info</div>
+                    <div class="action-item">
+                        <div class="action-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="action-text">Board Check</div>
+                    </div>
+                </div>
+
+                <div class="view-section">
+                    <div class="view-text">View</div>
+                </div>
+            </div>
+        </div>
+        <style>
+            :root {
+                --primary-dark: #1a365d;
+                --secondary-dark: #2d3748;
+                --info-color: #0ea5e9;
+                --light-bg: #f7fafc;
+                --border-color: #e2e8f0;
+                --success-color: #10b981;
+                --warning-color: #f59e0b;
+                --danger-color: #ef4444;
+            }
+
+            .transactions-container {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                overflow: hidden;
+                margin-top: 15px;
+            }
+
+            .transactions-header {
+                background: #f8fafc;
+                padding: 15px 20px;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .transaction-item {
+                padding: 16px 20px;
+                border-bottom: 1px solid var(--border-color);
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+            }
+
+            .transaction-item:last-child {
+                border-bottom: none;
+            }
+
+            .transaction-item:hover {
+                background-color: #f8fafc;
+            }
+
+            .transaction-icon {
+                width: 42px;
+                height: 42px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 15px;
+                font-size: 1.1rem;
+            }
+
+            .icon-debit {
+                background-color: rgba(239, 68, 68, 0.1);
+                color: var(--danger-color);
+            }
+
+            .icon-credit {
+                background-color: rgba(16, 185, 129, 0.1);
+                color: var(--success-color);
+            }
+
+            .icon-pending {
+                background-color: rgba(245, 158, 11, 0.1);
+                color: var(--warning-color);
+            }
+
+            .icon-check {
+                background-color: rgba(14, 165, 233, 0.1);
+                color: var(--info-color);
+            }
+
+            .transaction-content {
+                flex: 1;
+            }
+
+            .transaction-description {
+                font-weight: 600;
+                font-size: 1rem;
+                margin-bottom: 4px;
+                color: var(--secondary-dark);
+            }
+
+            .transaction-meta {
+                display: flex;
+                align-items: center;
+                color: #64748b;
+                font-size: 0.85rem;
+            }
+
+            .transaction-type {
+                font-weight: 500;
+            }
+
+            .transaction-amount {
+                font-weight: 700;
+                font-size: 1.05rem;
+                text-align: right;
+            }
+
+            .amount-debit {
+                color: var(--danger-color);
+            }
+
+            .amount-credit {
+                color: var(--success-color);
+            }
+
+            .transaction-date {
+                color: #94a3b8;
+                font-size: 0.8rem;
+                margin-top: 4px;
+            }
+
+            .transaction-balance {
+                color: #64748b;
+                font-size: 0.8rem;
+                margin-top: 2px;
+            }
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 3px 8px;
+                border-radius: 12px;
+                font-size: 0.7rem;
+                font-weight: 600;
+                margin-left: 8px;
+            }
+
+            .badge-pending {
+                background-color: rgba(245, 158, 11, 0.1);
+                color: var(--warning-color);
+            }
+
+            .badge-completed {
+                background-color: rgba(16, 185, 129, 0.1);
+                color: var(--success-color);
+            }
+
+            .transactions-list {
+                max-height: 400px;
+                overflow-y: auto;
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 40px 20px;
+                color: #64748b;
+            }
+
+            .empty-state i {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+                color: #cbd5e1;
+            }
+
+            .transaction-summary {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .transaction-actions {
+                display: flex;
+                gap: 10px;
+            }
+
+            .btn-sm {
+                padding: 4px 10px;
+                font-size: 0.8rem;
+            }
+
+            @media (max-width: 576px) {
+                .transaction-item {
+                    padding: 12px 15px;
+                }
+
+                .transaction-icon {
+                    width: 36px;
+                    height: 36px;
+                    margin-right: 12px;
+                }
+
+                .transaction-description {
+                    font-size: 0.95rem;
+                }
+
+                .transaction-summary {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+
+                .transaction-actions {
+                    align-self: flex-end;
+                }
+            }
+        </style>
+
+        <div class="container mt-4">
+            <div class="account-card">
+                <div class="p-4">
+                    <h5 class="form-section-title">Transaction Activity</h5>
+
+                    <!-- Navigation Tabs -->
+                    <ul class="nav nav-tabs mb-4" id="transactionTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="activity-tab" data-bs-toggle="tab"
+                                data-bs-target="#activity" type="button" role="tab">Activity</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="scheduled-tab" data-bs-toggle="tab" data-bs-target="#scheduled"
+                                type="button" role="tab">Scheduled</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="holds-tab" data-bs-toggle="tab" data-bs-target="#holds"
+                                type="button" role="tab">Holds</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="transactionTabsContent">
+                        <!-- Activity Tab -->
+                        <div class="tab-pane fade show active" id="activity" role="tabpanel">
+                            <!-- Transaction Form -->
+
+
+                            <!-- Recent Transactions -->
+                            <div class="transactions-container">
+                                <div class="transactions-header">
+                                    <div class="transaction-summary">
+                                        <h6 class="mb-0">Recent Transactions</h6>
+                                        <div class="transaction-actions">
+                                            <button class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-filter me-1"></i> Filter
+                                            </button>
+                                            <button class="btn btn-outline-secondary btn-sm">
+                                                <i class="fas fa-download me-1"></i> Export
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="transactions-list">
+                                    <!-- Transaction 1 -->
+                                    <% if (transcations.length> 0) { %>
+                                        <% transcations.forEach(transcation=> { %>
+
+                                            <div class="transaction-item">
+                                                <div class="transaction-icon icon-pending">
+                                                    <i class="fas fa-store"></i>
+                                                </div>
+                                                <div class="transaction-content">
+                                                    <div class="transaction-description">
+                                                        <%= transcation.description %>
+                                                    </div>
+                                                    <div class="transaction-meta">
+                                                        <span class="transaction-type">
+                                                            <%= transcation.type %>
+                                                        </span>
+
+                                                        <span class="status-badge animate-zoom text-white 
+    <% if (transcation.status === 'completed') { %> badge-completed 
+       <% } else if (transcation.status === 'pending') { %> badge-pending 
+       <% } else if (transcation.status === 'cancelled') { %> badge-cancelled 
+    <% } %>">
+                                                            <i class="fas fa-clock me-1 text-dark"></i>
+                                                            <%= transcation.status %>
+                                                        </span>
+                                                    </div>
+
+                                                    <!-- transcation amount (color depends on type) -->
+                                                    <div class="text-end">
+                                                        <div class="transcation-amount 
+    <% if (transcation.type === 'debit') { %> amount-debit 
+       <% } else if (transcation.type === 'credit') { %> amount-credit 
+    <% } %>">
+                                                            ₦<%= transcation.amount %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="transcation-date">
+                                                        <%= transcation.date.toLocaleDateString() %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }) %>
+                                                <% } %>
+
+                                                    <style>
+                                                        /* Zoom Animation */
+                                                        @keyframes zoomInOut {
+                                                            0% {
+                                                                transform: scale(1);
+                                                            }
+
+                                                            50% {
+                                                                transform: scale(1.2);
+                                                            }
+
+                                                            100% {
+                                                                transform: scale(1);
+                                                            }
+                                                        }
+
+                                                        .animate-zoom {
+                                                            display: inline-block;
+                                                            animation: zoomInOut 1.5s ease-in-out infinite;
+                                                            transition: transform 0.3s ease;
+                                                            border-radius: 0.5rem;
+                                                            padding: 0.4em 0.8em;
+                                                            font-weight: 500;
+                                                        }
+
+                                                        /* Badge colors */
+                                                        .badge-pending {
+                                                            background-color: #ffc107;
+                                                            /* Yellow */
+                                                            color: #000;
+                                                        }
+
+                                                        .badge-completed {
+                                                            background-color: #198754;
+                                                            /* Green */
+                                                            color: #fff;
+                                                        }
+
+                                                        .badge-cancelled {
+                                                            background-color: #dc3545;
+                                                            /* Red */
+                                                            color: #fff;
+                                                        }
+
+                                                        /* Amount colors */
+                                                        .amount-debit {
+                                                            color: #dc3545;
+                                                            /* Red for debit */
+                                                            font-weight: 600;
+                                                        }
+
+                                                        .amount-credit {
+                                                            color: #198754;
+                                                            /* Green for credit */
+                                                            font-weight: 600;
+                                                        }
+                                                    </style>
+
+                                                    <!-- Transaction 2 -->
+                                                    <div class="transaction-item">
+                                                        <div class="transaction-icon icon-debit">
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                        </div>
+                                                        <div class="transaction-content">
+                                                            <div class="transaction-description">Target</div>
+                                                            <div class="transaction-meta">
+                                                                <span class="transaction-type">Debit Card</span>
+                                                            </div>
+                                                            <div class="transaction-balance">Balance: $694.87</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="transaction-amount amount-debit">- $200.00</div>
+                                                            <div class="transaction-date">Feb 3, 2025</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Transaction 3 -->
+                                                    <div class="transaction-item">
+                                                        <div class="transaction-icon icon-check">
+                                                            <i class="fas fa-money-check"></i>
+                                                        </div>
+                                                        <div class="transaction-content">
+                                                            <div class="transaction-description">Check #4378</div>
+                                                            <div class="transaction-meta">
+                                                                <span class="transaction-type">Check Deposit</span>
+                                                            </div>
+                                                            <div class="transaction-balance">Balance: $894.87</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="transaction-amount amount-credit">+ $1,000.00
+                                                            </div>
+                                                            <div class="transaction-date">Feb 2, 2025</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Transaction 4 -->
+                                                    <div class="transaction-item">
+                                                        <div class="transaction-icon icon-debit">
+                                                            <i class="fas fa-coffee"></i>
+                                                        </div>
+                                                        <div class="transaction-content">
+                                                            <div class="transaction-description">Starbucks Card Reload
+                                                            </div>
+                                                            <div class="transaction-meta">
+                                                                <span class="transaction-type">Debit Card</span>
+                                                            </div>
+                                                            <div class="transaction-balance">Balance: $794.87</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="transaction-amount amount-debit">- $20.00</div>
+                                                            <div class="transaction-date">Feb 2, 2025</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Transaction 5 (Additional example) -->
+                                                    <div class="transaction-item">
+                                                        <div class="transaction-icon icon-debit">
+                                                            <i class="fas fa-gas-pump"></i>
+                                                        </div>
+                                                        <div class="transaction-content">
+                                                            <div class="transaction-description">Shell Gas Station</div>
+                                                            <div class="transaction-meta">
+                                                                <span class="transaction-type">Debit Card</span>
+                                                                <span class="status-badge badge-completed">
+                                                                    <i class="fas fa-check me-1"></i> COMPLETED
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="transaction-amount amount-debit">- $45.50</div>
+                                                            <div class="transaction-date">Feb 1, 2025</div>
+                                                        </div>
+                                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scheduled Tab -->
+                        <div class="tab-pane fade" id="scheduled" role="tabpanel">
+                            <div class="text-center py-4">
+                                <i class="fas fa-calendar-alt fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">No scheduled transactions</p>
+                            </div>
+                        </div>
+
+                        <!-- Holds Tab -->
+                        <div class="tab-pane fade" id="holds" role="tabpanel">
+                            <div class="text-center py-4">
+                                <i class="fas fa-lock fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">No holds on your account</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <%- include('../snippets/navbutton.ejs') %>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Update the current date and time
+                function updateDateTime() {
+                    const now = new Date();
+                    const options = {
+                        month: 'numeric',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    };
+                    const dateTimeString = now.toLocaleDateString('en-US', options);
+                    const dateTimeElement = document.querySelector('.date-time');
+                    if (dateTimeElement) {
+                        dateTimeElement.textContent = dateTimeString;
+                    }
+                }
+
+                // Update the date/time every minute
+                updateDateTime();
+                setInterval(updateDateTime, 60000);
+
+                // Set active navigation item based on current page
+                function setActiveNavItem() {
+                    const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+                    const navItems = document.querySelectorAll('.nav-item');
+
+                    navItems.forEach(item => {
+                        const href = item.getAttribute('href');
+                        if (href === currentPage) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
+                }
+
+                setActiveNavItem();
+            });
+        </script>
+</body>
+
+</html>
