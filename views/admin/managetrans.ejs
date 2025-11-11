@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Key Admin </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/img/cadalogo.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+
+</head>
+
+<body>
+
+    <%- include('../snippets/sidebar.ejs') %>
+
+        <!-- Manage Transactions -->
+        <div class="account-card">
+            <div class="p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="form-section-title mb-0">Manage Transactions</h5>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-download me-1"></i> Export
+                        </button>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i> New Transaction
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search transactions...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option value="">All Types</option>
+                            <option value="debit">Debit Card</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="check">Check</option>
+                            <option value="transfer">Transfer</option>
+                            <option value="deposit">Deposit</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+               <!-- Manage Transactions -->
+<!-- Manage Transactions -->
+<div class="account-card">
+    <div class="p-4">
+        <!-- Success/Error Messages -->
+        <% if (typeof success !== 'undefined') { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+        
+        <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="form-section-title mb-0">Manage Transactions</h5>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-download me-1"></i> Export
+                </button>
+                <button class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i> New Transaction
+                </button>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Balance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (transcations && transcations.length > 0) { %>
+                        <% transcations.forEach((transcation, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="transaction-icon-sm 
+                                            <% if (transcation.type === 'debit') { %>bg-danger
+                                            <% } else if (transcation.type === 'credit') { %>bg-success
+                                            <% } else if (transcation.type === 'check') { %>bg-primary
+                                            <% } else { %>bg-secondary<% } %> me-2">
+                                            <i class="fas 
+                                                <% if (transcation.type === 'debit') { %>fa-shopping-cart
+                                                <% } else if (transcation.type === 'credit') { %>fa-credit-card
+                                                <% } else if (transcation.type === 'check') { %>fa-money-check
+                                                <% } else { %>fa-exchange-alt<% } %> text-white">
+                                            </i>
+                                        </div>
+                                        <span><%= transcation.description %></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark text-capitalize">
+                                        <%= transcation.type %>
+                                    </span>
+                                </td>
+                                <td class="<%= transcation.type === 'debit' ? 'text-danger' : 'text-success' %> fw-bold">
+                                    <%= transcation.type === 'debit' ? '-' : '+' %> $<%= transcation.amount %>
+                                </td>
+                                <td><%= transcation.date.toLocaleDateString() %></td>
+                                <td>
+                                    <span class="badge 
+                                        <% if (transcation.status === 'pending') { %>bg-warning text-dark zoom-continuous
+                                        <% } else if (transcation.status === 'completed') { %>bg-success text-white
+                                        <% } else if (transcation.status === 'cancelled') { %>bg-danger text-white
+                                        <% } %> text-capitalize">
+                                        <i class="fas 
+                                            <% if (transcation.status === 'pending') { %>fa-clock
+                                            <% } else if (transcation.status === 'completed') { %>fa-check
+                                            <% } else if (transcation.status === 'cancelled') { %>fa-times
+                                            <% } %> me-1">
+                                        </i>
+                                        <%= transcation.status %>
+                                    </span>
+                                </td>
+                                <td>$<%= transcation.balance %></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editTransactionModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        
+                                        <!-- Delete Form -->
+                                        <form action="/admin/transactions/<%= transcation._id %>/delete" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-outline-danger delete-btn" 
+                                                    data-description="<%= transcation.description %>">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <i class="fas fa-exchange-alt fa-2x text-muted mb-2"></i>
+                                <p class="text-muted mb-0">No transactions found</p>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete transaction: "<span id="transactionDescription"></span>"?
+                <br><br>
+                <small class="text-danger">This action cannot be undone.</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Transaction</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Delete confirmation with modal
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    const deleteForm = document.getElementById('deleteForm');
+    const transactionDescription = document.getElementById('transactionDescription');
+    
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const description = this.getAttribute('data-description');
+            const form = this.closest('form');
+            const action = form.getAttribute('action');
+            
+            // Set the transaction description in modal
+            transactionDescription.textContent = description;
+            
+            // Set the form action
+            deleteForm.setAttribute('action', action);
+            
+            // Show the confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            modal.show();
+        });
+    });
+    
+    // Handle URL parameters for success/error messages
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const error = urlParams.get('error');
+    
+    if (success) {
+        showAlert(success, 'success');
+    }
+    if (error) {
+        showAlert(error, 'danger');
+    }
+    
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.querySelector('.account-card .p-4').insertBefore(alertDiv, document.querySelector('.d-flex.justify-content-between'));
+        
+        // Remove success/error from URL without reload
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+});
+</script>
+
+<style>
+.transaction-icon-sm {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #191C24;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.875rem;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Continuous Zoom Animation for Status */
+@keyframes continuousZoom {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+}
+
+.zoom-continuous {
+    animation: continuousZoom 1.5s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+.account-card {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e9ecef;
+}
+
+.form-section-title {
+    color: #191C24;
+    font-weight: 600;
+}
+
+/* Delete button hover effect */
+.delete-btn:hover {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+</style>
+            </div>
+        </div>
+
+        <!-- Edit Transaction Modal -->
+        <div class="modal fade" id="editTransactionModal" tabindex="-1" aria-labelledby="editTransactionModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTransactionModalLabel">Edit Transaction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editTransactionForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="editDescription" class="form-label">Description</label>
+                                    <input type="text" class="form-control" id="editDescription" value="Home Depot">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="editAmount" class="form-label">Amount</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="editAmount" value="85.00"
+                                            step="0.01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="editDate" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="editDate" value="2025-02-03">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="editType" class="form-label">Transaction Type</label>
+                                    <select class="form-select" id="editType">
+                                        <option value="debit" selected>Debit Card</option>
+                                        <option value="credit">Credit Card</option>
+                                        <option value="check">Check</option>
+                                        <option value="transfer">Transfer</option>
+                                        <option value="deposit">Deposit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="editStatus" class="form-label">Status</label>
+                                    <select class="form-select" id="editStatus">
+                                        <option value="pending" selected>Pending</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="editBalance" class="form-label">Balance After Transaction</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="editBalance" value="694.87"
+                                            step="0.01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="editUser" class="form-label">User</label>
+                                    <select class="form-select" id="editUser">
+                                        <option value="user1" selected>John Doe</option>
+                                        <option value="user2">Jane Smith</option>
+                                        <option value="user3">Mike Johnson</option>
+                                        <option value="user4">Sarah Wilson</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .transaction-icon-sm {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8rem;
+            }
+
+            .table th {
+                border-top: none;
+                font-weight: 600;
+                color: #191C24;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+            }
+
+            .table td {
+                vertical-align: middle;
+                font-size: 0.875rem;
+            }
+
+            .badge {
+                font-size: 0.75rem;
+            }
+
+            .btn-group-sm .btn {
+                padding: 0.25rem 0.5rem;
+            }
+
+            /* Continuous Zoom Animation for Status */
+            @keyframes continuousZoom {
+                0% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+                }
+
+                50% {
+                    transform: scale(1.08);
+                    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+                }
+
+                100% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+                }
+            }
+
+            .zoom-continuous {
+                animation: continuousZoom 1.5s ease-in-out infinite;
+                transition: all 0.3s ease;
+            }
+
+            .account-card {
+                background-color: #FFFFFF;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                border: 1px solid #e9ecef;
+            }
+
+            .form-section-title {
+                color: #191C24;
+                font-weight: 600;
+            }
+        </style>
+
+
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="modalMessage">
+                        <!-- Success message will go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../snippets/footer.ejs') %>
+
+            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body" id="modalMessage">
+                            <!-- Success message will go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+            <!-- DataTables & Bootstrap -->
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+            <script src="/formHandler/transcation.js"></script>
+            <script src="/js/dashboard.js"></script>
+
+</body>
+
+</html>

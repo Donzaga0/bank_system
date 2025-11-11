@@ -100,7 +100,7 @@
         }
         
         .account-btn {
-            background: none;
+            background: var(--primary-color);
             border: none;
             display: flex;
             align-items: center;

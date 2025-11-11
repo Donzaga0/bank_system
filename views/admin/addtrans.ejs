@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Key Admin </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/img/cadalogo.jpg" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+
+</head>
+
+<body>
+
+    <%- include('../snippets/sidebar.ejs') %>
+
+        <!-- Transaction Activity -->
+        <div class="account-card">
+            <div class="p-4">
+                <h5 class="form-section-title">Transaction Activity</h5>
+
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs mb-4" id="transactionTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="activity-tab" data-bs-toggle="tab"
+                            data-bs-target="#activity" type="button" role="tab">Activity</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="scheduled-tab" data-bs-toggle="tab" data-bs-target="#scheduled"
+                            type="button" role="tab">Scheduled</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="holds-tab" data-bs-toggle="tab" data-bs-target="#holds"
+                            type="button" role="tab">Holds</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="transactionTabsContent">
+                    <!-- Activity Tab -->
+                    <div class="tab-pane fade show active" id="activity" role="tabpanel">
+                        <!-- Transaction Form -->
+                        <div class="transaction-form mb-4">
+                            <h5 class="form-section-title">Add New Transaction</h5>
+                            <form id="transactionForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transactionDescription" class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="transactionDescription"
+                                            placeholder="e.g., Home Depot, Target, etc." name="description">
+                                        <div class="descriptionErr error text-center" style="color: red;"></div>
+
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transactionAmount" class="form-label">Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="transactionAmount"
+                                                placeholder="0.00" step="0.01" name="amount">
+                                        </div>
+                                        <div class="amountErr error text-center" style="color: red;"></div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transactionDate" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="transactionDate" name="date">
+                                        <div class="dateErr error text-center" style="color: red;"></div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transactionType" class="form-label">Transaction Type</label>
+                                        <select class="form-select" id="transactionType" name="type">
+                                            <option value="" disabled selected>Select type</option>
+                                            <option value="debit">Debit Card</option>
+                                            <option value="credit">Credit Card</option>
+                                            <option value="check">Check</option>
+                                            <option value="transfer">Transfer</option>
+                                            <option value="deposit">Deposit</option>
+                                        </select>
+                                        <div class="typeErr error text-center" style="color: red;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transactionStatus" class="form-label">Status</label>
+                                        <select class="form-select" id="transactionStatus" name="status">
+                                            <option value="" disabled selected>Select status</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                        <div class="statusErr error text-center" style="color: red;"></div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transactionBalance" class="form-label">Balance After
+                                            Transaction</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="transactionBalance"
+                                                placeholder="0.00" step="0.01" name="balance">
+                                        </div>
+                                        <div class="balanceErr error text-center" style="color: red;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                    <button type="reset" class="btn btn-outline-secondary me-md-2">Clear</button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle me-1"></i> Add Transaction
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <h6 class="mb-3">Recent Transactions</h6>
+
+                        <div class="transaction-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="transaction-description">Home Depot</div>
+                                    <div class="transaction-meta">Debit Card <span
+                                            class="transaction-type-badge badge-debit ms-2">PENDING</span></div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="transaction-amount amount-debit">- $85.00</div>
+                                    <div class="transaction-date">Feb 3, 2025</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="transaction-description">Target</div>
+                                    <div class="transaction-meta">Debit Card</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="transaction-amount amount-debit">- $200.00</div>
+                                    <div class="transaction-date">Feb 3, 2025</div>
+                                    <div class="transaction-meta">$694.87</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="transaction-description">Check #4378</div>
+                                    <div class="transaction-meta">Check</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="transaction-amount amount-credit">+ $1000.00</div>
+                                    <div class="transaction-date">Feb 2, 2025</div>
+                                    <div class="transaction-meta">$894.87</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="transaction-description">Starbucks Card Reload</div>
+                                    <div class="transaction-meta">Debit Card</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="transaction-amount amount-debit">- $20.00</div>
+                                    <div class="transaction-date">Feb 2, 2025</div>
+                                    <div class="transaction-meta">$794.87</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scheduled Tab -->
+                    <div class="tab-pane fade" id="scheduled" role="tabpanel">
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-alt fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No scheduled transactions</p>
+                        </div>
+                    </div>
+
+                    <!-- Holds Tab -->
+                    <div class="tab-pane fade" id="holds" role="tabpanel">
+                        <div class="text-center py-4">
+                            <i class="fas fa-lock fa-2x text-muted mb-3"></i>
+                            <p class="text-muted">No holds on your account</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Options -->
+        <div class="account-card">
+            <div class="p-4">
+                <h5 class="form-section-title">Account Services</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center p-3 border rounded">
+                            <i class="fas fa-file-invoice-dollar fa-2x text-info me-3"></i>
+                            <div>
+                                <h6 class="mb-1">View Statements & Documents</h6>
+                                <p class="mb-0 small text-muted">Set paperless preferences and more.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center p-3 border rounded">
+                            <i class="fas fa-bell fa-2x text-info me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Alerts & Notifications</h6>
+                                <p class="mb-0 small text-muted">Set up custom account alerts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
+
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="modalMessage">
+                        <!-- Success message will go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../snippets/footer.ejs') %>
+
+            <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body" id="modalMessage">
+                            <!-- Success message will go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+            <!-- DataTables & Bootstrap -->
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+            <script src="/formHandler/transcation.js"></script>
+            <script src="/js/dashboard.js"></script>
+
+</body>
+
+</html>

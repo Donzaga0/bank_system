@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WikiMap Dashboard</title>
+    <title>Key-Bank Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -365,7 +365,7 @@
     <div class="page-content">
         <div class="dashboard-container">
             <div class="header">
-                <a href="dashboard.html" class="logo">WikiMap</a>
+                <a href="dashboard.html" class="logo">KeyBank</a>
                 <div class="date-time">9/20/2025 5:53 PM</div>
             </div>
 
@@ -677,186 +677,163 @@
                                     </div>
                                 </div>
 
-                                <div class="transactions-list">
-                                    <!-- Transaction 1 -->
-                                    <% if (transcations.length> 0) { %>
-                                        <% transcations.forEach(transcation=> { %>
-
-                                            <div class="transaction-item">
-                                                <div class="transaction-icon icon-pending">
-                                                    <i class="fas fa-store"></i>
-                                                </div>
-                                                <div class="transaction-content">
-                                                    <div class="transaction-description">
-                                                        <%= transcation.description %>
-                                                    </div>
-                                                    <div class="transaction-meta">
-                                                        <span class="transaction-type">
-                                                            <%= transcation.type %>
-                                                        </span>
-
-                                                        <span class="status-badge animate-zoom text-white 
-    <% if (transcation.status === 'completed') { %> badge-completed 
-       <% } else if (transcation.status === 'pending') { %> badge-pending 
-       <% } else if (transcation.status === 'cancelled') { %> badge-cancelled 
-    <% } %>">
-                                                            <i class="fas fa-clock me-1 text-dark"></i>
-                                                            <%= transcation.status %>
-                                                        </span>
-                                                    </div>
-
-                                                    <!-- transcation amount (color depends on type) -->
-                                                    <div class="text-end">
-                                                        <div class="transcation-amount 
-    <% if (transcation.type === 'debit') { %> amount-debit 
-       <% } else if (transcation.type === 'credit') { %> amount-credit 
-    <% } %>">
-                                                            ₦<%= transcation.amount %>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="transcation-date">
-                                                        <%= transcation.date.toLocaleDateString() %>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <% }) %>
-                                                <% } %>
-
-                                                    <style>
-                                                        /* Zoom Animation */
-                                                        @keyframes zoomInOut {
-                                                            0% {
-                                                                transform: scale(1);
-                                                            }
-
-                                                            50% {
-                                                                transform: scale(1.2);
-                                                            }
-
-                                                            100% {
-                                                                transform: scale(1);
-                                                            }
-                                                        }
-
-                                                        .animate-zoom {
-                                                            display: inline-block;
-                                                            animation: zoomInOut 1.5s ease-in-out infinite;
-                                                            transition: transform 0.3s ease;
-                                                            border-radius: 0.5rem;
-                                                            padding: 0.4em 0.8em;
-                                                            font-weight: 500;
-                                                        }
-
-                                                        /* Badge colors */
-                                                        .badge-pending {
-                                                            background-color: #ffc107;
-                                                            /* Yellow */
-                                                            color: #000;
-                                                        }
-
-                                                        .badge-completed {
-                                                            background-color: #198754;
-                                                            /* Green */
-                                                            color: #fff;
-                                                        }
-
-                                                        .badge-cancelled {
-                                                            background-color: #dc3545;
-                                                            /* Red */
-                                                            color: #fff;
-                                                        }
-
-                                                        /* Amount colors */
-                                                        .amount-debit {
-                                                            color: #dc3545;
-                                                            /* Red for debit */
-                                                            font-weight: 600;
-                                                        }
-
-                                                        .amount-credit {
-                                                            color: #198754;
-                                                            /* Green for credit */
-                                                            font-weight: 600;
-                                                        }
-                                                    </style>
-
-                                                    <!-- Transaction 2 -->
-                                                    <div class="transaction-item">
-                                                        <div class="transaction-icon icon-debit">
-                                                            <i class="fas fa-shopping-cart"></i>
-                                                        </div>
-                                                        <div class="transaction-content">
-                                                            <div class="transaction-description">Target</div>
-                                                            <div class="transaction-meta">
-                                                                <span class="transaction-type">Debit Card</span>
-                                                            </div>
-                                                            <div class="transaction-balance">Balance: $694.87</div>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <div class="transaction-amount amount-debit">- $200.00</div>
-                                                            <div class="transaction-date">Feb 3, 2025</div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Transaction 3 -->
-                                                    <div class="transaction-item">
-                                                        <div class="transaction-icon icon-check">
-                                                            <i class="fas fa-money-check"></i>
-                                                        </div>
-                                                        <div class="transaction-content">
-                                                            <div class="transaction-description">Check #4378</div>
-                                                            <div class="transaction-meta">
-                                                                <span class="transaction-type">Check Deposit</span>
-                                                            </div>
-                                                            <div class="transaction-balance">Balance: $894.87</div>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <div class="transaction-amount amount-credit">+ $1,000.00
-                                                            </div>
-                                                            <div class="transaction-date">Feb 2, 2025</div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Transaction 4 -->
-                                                    <div class="transaction-item">
-                                                        <div class="transaction-icon icon-debit">
-                                                            <i class="fas fa-coffee"></i>
-                                                        </div>
-                                                        <div class="transaction-content">
-                                                            <div class="transaction-description">Starbucks Card Reload
-                                                            </div>
-                                                            <div class="transaction-meta">
-                                                                <span class="transaction-type">Debit Card</span>
-                                                            </div>
-                                                            <div class="transaction-balance">Balance: $794.87</div>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <div class="transaction-amount amount-debit">- $20.00</div>
-                                                            <div class="transaction-date">Feb 2, 2025</div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Transaction 5 (Additional example) -->
-                                                    <div class="transaction-item">
-                                                        <div class="transaction-icon icon-debit">
-                                                            <i class="fas fa-gas-pump"></i>
-                                                        </div>
-                                                        <div class="transaction-content">
-                                                            <div class="transaction-description">Shell Gas Station</div>
-                                                            <div class="transaction-meta">
-                                                                <span class="transaction-type">Debit Card</span>
-                                                                <span class="status-badge badge-completed">
-                                                                    <i class="fas fa-check me-1"></i> COMPLETED
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <div class="transaction-amount amount-debit">- $45.50</div>
-                                                            <div class="transaction-date">Feb 1, 2025</div>
-                                                        </div>
-                                                    </div>
+<div class="transactions-list">
+    <% if (transcations.length > 0) { %>
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+            </div>
+            <div class="card-body p-0">
+                <% transcations.forEach((transcation, index) => { %>
+                    <div class="transaction-item border-bottom <%= index === transcations.length - 1 ? '' : 'border-bottom' %> p-3">
+                        <div class="d-flex justify-content-between align-items-start w-100">
+                            <!-- Left side content -->
+                            <div>
+                                <div class="fw-bold mb-1"><%= transcation.description %></div>
+                                <div class="transaction-meta">
+                                    <span class="text-muted small text-capitalize me-2"><%= transcation.type %></span>
+                                    
+                                    <!-- Status badge with continuous zoom -->
+                                    <% if (transcation.status === 'pending') { %>
+                                        <span class="status-badge zoom-continuous badge-pending">
+                                            <i class="fas fa-clock me-1"></i>
+                                            <%= transcation.status %>
+                                        </span>
+                                    <% } else if (transcation.status === 'completed') { %>
+                                        <span class="status-badge zoom-continuous badge-completed">
+                                            <i class="fas fa-check me-1"></i>
+                                            <%= transcation.status %>
+                                        </span>
+                                    <% } else if (transcation.status === 'cancelled') { %>
+                                        <span class="status-badge zoom-continuous badge-cancelled">
+                                            <i class="fas fa-times me-1"></i>
+                                            <%= transcation.status %>
+                                        </span>
+                                    <% } %>
                                 </div>
+                            </div>
+                            
+                            <!-- Right side content -->
+                            <div class="text-end">
+                                <!-- Amount -->
+                                <div class="transaction-amount fw-bold mb-1
+                                    <% if (transcation.type === 'debit') { %>text-danger
+                                    <% } else if (transcation.type === 'credit') { %>text-success
+                                    <% } %>">
+                                    <% if (transcation.type === 'debit') { %>-<% } else if (transcation.type === 'credit') { %>+<% } %>
+                                    $<%= transcation.amount %>
+                                </div>
+                                
+                                <!-- Date -->
+                                <div class="transaction-date text-muted small mb-1">
+                                    <%= transcation.date.toLocaleDateString() %>
+                                </div>
+                                
+                                <!-- Balance - only show for some transactions like in the design -->
+                                <% if (index !== 0) { %>
+                                    <div class="transaction-balance text-muted small">
+                                        $<%= transcation.balance %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } else { %>
+        <!-- Empty state -->
+        <div class="text-center py-4">
+            <i class="fas fa-exchange-alt fa-2x text-muted mb-2"></i>
+            <p class="text-muted mb-0">No transactions found</p>
+        </div>
+    <% } %>
+</div>
+
+<style>
+.card {
+    border-radius: 8px;
+}
+
+.transaction-item:hover {
+    background-color: #f8f9fa;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.fw-bold {
+    font-weight: 600 !important;
+}
+
+.small {
+    font-size: 0.875rem;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.transaction-item:last-child {
+    border-bottom: none !important;
+}
+
+/* Status badges */
+.status-badge {
+    font-size: 0.7rem;
+    padding: 0.25em 0.6em;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.badge-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-completed {
+    background-color: #198754;
+    color: #fff;
+}
+
+.badge-cancelled {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Continuous Zoom Animation for Status */
+@keyframes continuousZoom {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+}
+
+.zoom-continuous {
+    animation: continuousZoom 1.5s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+.transaction-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+</style>
                             </div>
                         </div>
 
