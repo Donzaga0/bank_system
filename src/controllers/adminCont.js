@@ -1,15 +1,26 @@
 const Transcation = require('../models/transcation');
+const Balance = require('../models/balance');
 
 module.exports = {
-    getAdminDashboardPage: async (req, res) => {
-        try {
+   getAdminDashboardPage: async (req, res) => {
+    try {
+      // Fetch the most recent balance record
+      const balance = await Balance.findOne().sort({ lastUpdated: -1 });
 
-            return res.render('./admin/admindashboard.ejs', { res })
+      // If no balance record exists, create one with default 0.00
+      if (!balance) {
+        const newBalance = await Balance.create({ balance: 0.00 });
+        return res.render('./admin/admindashboard.ejs', { res, context: newBalance });
+      }
 
-        } catch (error) {
-            return res.status(500).json({ message: 'Server Error' });
-        }
-    },
+      // Pass the balance to the EJS template as 'context'
+      return res.render('./admin/admindashboard.ejs', { res, context: balance });
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server Error' });
+    }
+  },
 
     getAddTransPage: async (req, res) => {
         try {
@@ -118,4 +129,45 @@ module.exports = {
         }
     },
 
+    AddBalance: async (req, res) => {
+    try {
+      const { amount } = req.body;
+      console.log('Request body:', req.body);
+
+      // Validate amount (allow numbers with up to 2 decimals)
+      const amountPattern = /^\d+(\.\d{1,2})?$/;
+      if (!amountPattern.test(amount)) {
+        return res.status(400).json({ message: 'Enter a valid amount' });
+      }
+
+      // Convert amount to Number
+      const numericAmount = Number(amount);
+
+      // Check if a balance document exists
+      let balanceRecord = await Balance.findOne().sort({ lastUpdated: -1 });
+
+      if (balanceRecord) {
+        // Update the existing balance
+        balanceRecord.balance += numericAmount;
+        balanceRecord.lastUpdated = new Date();
+        await balanceRecord.save();
+      } else {
+        // Create a new balance document
+        balanceRecord = await Balance.create({ balance: numericAmount });
+      }
+
+      console.log('Updated balance:', balanceRecord);
+
+      return res.status(200).json({
+        success: true,
+        msg: 'Balance added successfully',
+        data: balanceRecord,
+        redirectURL: '/admin/dashboard'
+      });
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server Error' });
+    }
+  }
 }
