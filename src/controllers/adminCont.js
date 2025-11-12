@@ -108,4 +108,14 @@ module.exports = {
         }
     },
 
+     getProfilePage: async (req, res) => {
+        try {
+
+            return res.render('./admin/profile.ejs', { res })
+
+        } catch (error) {
+            return res.status(500).json({ message: 'Server Error' });
+        }
+    },
+
 }
