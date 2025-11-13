@@ -169,5 +169,42 @@ module.exports = {
       console.error(error);
       return res.status(500).json({ message: 'Server Error' });
     }
-  }
+  },
+
+  getAddBalancePage: async (req, res) => {
+    try {
+        // Fetch balances from database
+        const balances = await Balance.find().sort({ lastUpdated: -1 });
+        
+        return res.render('./admin/addbalance.ejs', { res,
+            balances: balances 
+        });
+
+    } catch (error) {
+        console.error('Error fetching balances:', error);
+        return res.status(500).json({ message: 'Server Error' });
+    }
+},
+
+deleteBalance: async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedBalance = await Balance.findByIdAndDelete(id);
+
+        if (!deletedBalance) {
+            return res.status(404).json({
+                success: false,
+                message: 'Balance not found'
+            });
+        }
+
+        // Redirect back to manage balance page with success message
+        res.redirect('/admin/balance?success=Balance deleted successfully');
+
+    } catch (error) {
+        console.error('Error deleting balance:', error);
+        res.redirect('/admin/balance?error=Error deleting balance');
+    }
+}
 }
